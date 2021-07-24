@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   GET DATA EBAY
+  </title>
+  <link href="{% static './style.css' %}" rel="stylesheet"/>
+ </head>
+ <body>
+   GET DATA EBAY
+  <a href="#" class="now">Now: {{now}}</a>
+  <h1>EBAY DATA</h1>
+  <ul>
+  {% for edt in obj %}
+      <li><a href = '{{ edt.link }}'>{{ edt.title }}|{{ edt.price }}|{{ edt.trendingprice }}|{{ edt.sold }}</a></li>
+  {% empty %}
+      <li>No articles yet.</li>
+  {% endfor %}
+  </ul>
+ </body>
+</html>

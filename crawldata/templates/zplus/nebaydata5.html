@@ -1,0 +1,104 @@
+{% load static %}
+{% load nFunction1 %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>jQuery Auto Tables Plugin Example</title>
+  <link href="{% static './zplus/style.css' %}" rel="stylesheet"/>
+  <!-- <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.2/materia/bootstrap.min.css">
+
+  <!-- jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- popper -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+  <!-- bootstrap -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+  <!-- autotables -->
+  <script src="{% static './zplus/auto-tables.js' %}"></script>
+  <style>
+    body { background-color: #fafafa; }
+    .container { margin: 150px auto; }
+    thead th { cursor: pointer; }
+  </style>
+
+</head>
+<body>
+<!-- <div id="jquery-script-menu">
+<div class="jquery-script-center">
+  <div id="carbon-block"></div>
+  <div class="jquery-script-clear"></div>
+</div>
+</div> -->
+<div class="container1">
+    <form action="{% url 'crawldata:search' %}" method="post">
+      {% csrf_token %}  
+      <input type="text" class="form-control mb-3 keywords-input"  placeholder="Key Words" name="keywords" value='{{keywords}}'>
+      <p>Result: {{countresult}} Items (keyword: {{keywords_result}})</p>
+      <input type="submit" class="form-control mb-3 submit-input"  value="Search"> 
+    </form> 
+    <input type="text" class="form-control mb-3 tablesearch-input" data-tablesearch-table="#data-table"  placeholder="Filter">
+
+    <div class="table-responsive">
+
+      <table id="data-table" class="table tablesearch-table table-bordered table-striped">
+        <thead><tr>
+          <th>Title</th>
+          <th>Category Name</th>
+          <th>Condition</th>
+          <th>Price</th>
+          <th>Trending Price</th>
+          <th>Watch</th>
+          <th>Sold</th>
+          <th>new1</th>
+        </tr></thead>
+        <tbody>
+          
+          {% for value in obj %}
+              <tr>
+                <td><a href = '{{value.viewItemURL}}'>{{value.title}}</a></td>
+                <td>{{value.primaryCategory.categoryName}}</td>
+                <td>{{value.condition.conditionDisplayName}}</td>
+                <td>{{value.sellingStatus.currentPrice.value}}</td>
+                <td>{{value.discountPriceInfo}}</td>
+                <td>{{value.listingInfo.watchCount}}</td>
+                <td>{{value.subtitle}}</td>
+                <td>{{value}}</td>
+              </tr>
+        
+          {% empty %}
+            <p>No articles yet.</p>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+    <script>
+
+      $(document).ready(function() {
+
+        var headers = $('#data-table thead th');
+
+        $(headers[0]).attr('data-tablesort-type', 'string');
+        $(headers[1]).attr('data-tablesort-type', 'string');
+        $(headers[2]).attr('data-tablesort-type', 'string');
+        $(headers[4]).attr('data-tablesort-type', 'string');
+        $(headers[5]).attr('data-tablesort-type', 'int');
+        $(headers[6]).attr('data-tablesort-type', 'int');
+        $(headers[7]).attr('data-tablesort-type', 'int');
+        $('table').not(".tablesort").addClass('tablesort');
+        // $('')
+
+      });
+
+
+    </script>
+  </body>
+  </html>

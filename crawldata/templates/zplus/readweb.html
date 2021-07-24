@@ -1,0 +1,151 @@
+{% load static %}
+  
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   My Music Player
+  </title>
+  <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.7/mediaelementplayer.min.css" rel="stylesheet"/>
+  <link href="{% static './style.css' %}" rel="stylesheet"/>
+ </head>
+ <body>
+  <!-- partial:index.partial.html -->
+  <html>
+   <head>
+    <meta charset="utf-8"/>
+    <title>
+     Flat music player
+    </title>
+   </head>
+   <body>
+    <!-- <audio src="{   % say 'en-us' 'Django is a high-level Python Web framework' %   }" controls></audio> -->
+    <button onclick="playlist()">Play</button>
+    <div id="music_list">
+      <audio controls autoplay>
+        <source src="" type="audio/mp3"/>
+      </audio>
+      
+    </div>
+    <!-- <div class="contain">
+     <div class="container">
+      <div class="music-player">
+        {% for item in page_obj %}
+       <div class="cover">
+        <img alt="" src=""/>
+       </div>
+       <div class="titre">
+        <h1>
+         {{item.text}}
+        </h1>
+       </div>
+       <center>
+            <a href="{% for item in page_obj %}
+       <div class="cover">
+        <img alt="" src=""/>
+       </div>
+       <div class="titre">
+        <h1>
+         {{item.text}}
+        </h1>
+       </div>
+       <center>
+            <a href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %}"><i class="fa fa-step-backward fa-2x"></i></a> &nbsp; &nbsp; &nbsp; <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }} {% endif %}"><i class="fa fa-step-forward fa-2x"></i></a>
+       </center>
+       <div class="lecteur">
+        <audio class="fc-media" style="width: 100%;"></audio>
+         <source src="{% if item.text %}{{item.link}} {% else %} '' {% endif %}" type="audio/mp3"/>
+        </audio>
+        <a href="{{item.link}}" class="say">Say it</a>
+       </div>
+       {% endfor %}"><i class="fa fa-step-backward fa-2x"></i></a> &nbsp; &nbsp; &nbsp; <a href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }} {% endif %}"><i class="fa fa-step-forward fa-2x"></i></a>
+       </center>
+       <div class="lecteur">
+        <audio class="fc-media" style="width: 100%;"></audio>
+         <source src="{% if item.text %}{{item.link}} {% else %} '' {% endif %}" type="audio/mp3"/>
+        </audio>
+        <a href="{{item.link}}" class="say">Say it</a>
+       </div>
+       {% endfor %}
+      </div>
+     </div>
+    </div> -->
+   </body>
+  </html>
+  <!-- partial -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.7/mediaelement-and-player.min.js">
+  </script>
+  <script src="{% static './script.js' %}">
+  </script>
+  <script>
+    $("a.say").click(function(){
+            // alert("The paragraph was clicked.");
+        // say($(this).attr('href'));
+    });
+
+    function say(m) {
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        //msg.voice = voices[38];
+        msg.voiceURI = "native";
+        msg.volume = 1;
+        msg.rate = 2;
+        msg.pitch = 0.8;
+        msg.text = m;
+        msg.lang = 'vi-VN';
+        speechSynthesis.speak(msg);
+        }
+
+        // Playlist array
+    // var files = [
+    //     "sample1.mp3",
+    //     "sample2.mp3",
+    //     "sample3.mp3"
+    // ];
+
+    var files = [
+      {% for item in page_obj %}
+         "{{item.mp3}}",
+      {% endfor %}
+      "end.mp3"
+    ];
+    
+    // Current index of the files array
+    var i = 0;
+
+    // Get the audio element
+    var music_player = document.querySelector("#music_list audio");
+
+    // function for moving to next audio file
+   
+    function next() {
+        // Check for last audio file in the playlist
+        if (i === files.length - 1) {
+            i = 0;
+        } else {
+            i++;
+        }
+
+        // Change the audio element source
+        music_player.src = files[i];
+    }
+    function playlist(){
+      // Check if the player is selected
+      if (music_player === null) {
+          throw "Playlist Player does not exists ...";
+      } else {
+          // Start the player
+          music_player.src = files[i];
+
+          // Listen for the music ended event, to play the next audio file
+          music_player.addEventListener('ended', next, false)
+      }
+    }
+
+  </script>
+ </body>
+</html>
